@@ -1,0 +1,157 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define a structure to store inventory information
+struct inventory {
+  int serial_number;
+  char product_name[256];
+  int quantity;
+  float price;
+};
+
+// Function to add a new product to the inventory
+void add_product(struct inventory *inventory, int serial_number,
+                 char *product_name, int quantity, float price) {
+  inventory[serial_number].serial_number = serial_number;
+  strcpy(inventory[serial_number].product_name, product_name);
+  inventory[serial_number].quantity = quantity;
+  inventory[serial_number].price = price;
+}
+
+// Function to sell a product
+void sell_product(struct inventory *inventory, int serial_number,
+                  int quantity) {
+  if (inventory[serial_number].quantity < quantity) {
+    printf("\n------------------------------------------------------");
+    printf("\nNot enough inventory!!!");
+    printf("\n------------------------------------------------------\n");
+    return;
+  }
+  inventory[serial_number].quantity -= quantity;
+  printf("\n------------------------------------------------------");
+  printf("\nProduct sold sucessfully!!!!!!!");
+  printf("\n------------------------------------------------------\n");
+}
+
+// Function to generate a report of all products in inventory
+void generate_report(struct inventory *inventory, int serial_number,
+                     char product_name, int quantity, float price) {
+  int length, j;
+  printf("\n******************** SYSTEM GENERATED "
+         "REPORT ********************\n-------------------------------------------------"
+         "----------"
+         "------\n");
+  printf("| S.No\t|\tProduct Name\t\t    |\tQuantity\t|\tPrice\t|\n");
+  printf("-----------------------------------------------------------------\n");
+  for (int i = 1; i < 100; i++) {
+    if (inventory[i].serial_number == 0) {
+      break;
+    }
+    length = strlen(inventory[i].product_name);
+    printf("| %d\t\t|   ", inventory[i].serial_number);
+    printf("%s", inventory[i].product_name);
+    for (j = length - 1; j <= 22; j++)
+      printf(" ");
+    printf("|\t%d\t\t\t|\t%.2f\t|\n", inventory[i].quantity,
+           inventory[i].price);
+  }
+  printf("-----------------------------------------------------------------\n");
+}
+
+int main() {
+  int serial_number;
+  int quantity;
+  float price;
+  int f = 1;
+  // Create an array of inventory structures
+  struct inventory inventory[100];
+  printf("+----------------------------------------+\n//////////////////////"
+         "//////"
+         "//////////\n"
+         "\n\nWelcome to INVENTORY MANAGEMENT SYSTEM"
+         "\n\n\n////////////////////"
+         "//////"
+         "////////////"
+         "\n+----------------------------------------+\n");
+
+  // Initialize the inventory
+  for (int i = 0; i < 100; i++) {
+    inventory[i].serial_number = 0;
+  }
+  int c = 1;
+
+  // Get user input
+  while (f >= 1) {
+    if (f > 1)
+      printf("\nINVENTORY MANAGEMENT SYSTEM");
+    else
+      f++;
+    printf("\n==========================================\n");
+    printf("\n1. Add product\n2. Sell product\n3. Generate report\n4. Exit\n");
+    printf("\n==========================================\n");
+    int choice;
+    printf("\nEnter choice : ");
+    scanf("%d", &choice);
+    printf("\n==========================================\n");
+
+    switch (choice) {
+    case 1:
+      // Add product
+      fflush(stdin);
+      serial_number = c++;
+
+      printf("\nEnter Product Name: ");
+      char product_name[256];
+      scanf("%s", product_name);
+
+      printf("Enter Quantity: ");
+      scanf("%d", &quantity);
+
+      printf("Enter Price: ");
+      scanf("%f", &price);
+
+      add_product(inventory, serial_number, product_name, quantity, price);
+      for (int i = 0; i < 100; i++) {
+        if (inventory[i].serial_number == 0) {
+          break;
+        }
+        printf("%d | %s | %d | %.2f\n", inventory[i].serial_number,
+               inventory[i].product_name, inventory[i].quantity,
+               inventory[i].price);
+      }
+      printf("\n------------------------------------------------------");
+      printf("\nProduct added sucessfully!!!!!!!");
+      printf("\n------------------------------------------------------\n");
+      break;
+
+    case 2:
+      // Sell product
+      printf("\nEnter product ID: ");
+      scanf("%d", &serial_number);
+
+      printf("Enter quantity: ");
+      scanf("%d", &quantity);
+
+      sell_product(inventory, serial_number, quantity);
+      break;
+
+    case 3:
+      printf("\n");
+      // Generate report
+      generate_report(inventory, serial_number, product_name, quantity, price);
+      break;
+
+    case 4:
+      // Exit
+      printf("\nQUITING... ");
+      printf("\n===================XXX====================\n");
+      return 0;
+
+    default:
+      printf("\n------------------------------------------------------");
+      printf("\nINVALID OPTION !!!\nENTER FROM THE CHOICES GIVEN BELOW...");
+      printf("\n------------------------------------------------------\n");
+    }
+  }
+}
